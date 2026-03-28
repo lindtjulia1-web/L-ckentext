@@ -8,7 +8,10 @@
 }.btn { border: none; padding: 14px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }.btn-main { background: var(--accent); color: #000; }.btn-code { background: #77dd77; color: #000; }.btn-blank { background: var(--neon); color: #fff; font-size: 11px; padding: 8px; }.preview { flex: 1; background: #0c0c0e; display: flex; align-items: center; justify-content: center; padding: 40px; }#device-wrapper { position: relative; background: transparent; border-radius: 30px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }iframe { width: 100%; height: 100%; border: none; border-radius: 30px; background: transparent; }#code-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 100; flex-direction: column; }#result-code { width: 80%; height: 50%; background: #111; color: var(--accent); padding: 20px; border: 1px solid var(--accent); border-radius: 20px; }#text-editor { background: #111; border: 1px solid var(--accent); min-height: 100px; padding: 10px; border-radius: 10px; line-height: 1.6; outline: none; margin-bottom: 10px; }.mark { background: rgba(255, 0, 255, 0.3); border-bottom: 2px solid var(--neon); padding: 0 2px; border-radius: 3px; }</style></head><body><div class="sidebar"><div class="sidebar-content"><h2>1. Настройки Экрана</h2><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"><div><label>Ширина</label><input type="number" id="width" value="800"></div><div><label>Высота</label><input type="number" id="height" value="450"></div></div><label>Фон (URL)</label><input type="text" id="bg-url" placeholder="URL картинки Ghibli"><h2>2. Контент и Текст</h2><div class="card"><label>Текст задания</label><div id="text-editor" contenteditable="true">Ich lerne Deutsch. Das macht Spaß!</div><button class="btn btn-blank" onclick="makeBlank()">✨ СДЕЛАТЬ ПРОПУСКОМ</button></div><h2>3. Дизайн</h2><div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;"><div><label>Акцент (Неон)</label><input type="color" id="neon-color" value="#ff00ff"></div><div><label>Текст</label><input type="color" id="text-color" value="#00d4ff"></div></div><label>Шрифт</label><select id="font-family"><option value="Segoe UI">Segoe UI</option><option value="Indie Flower">Indie Flower</option><option value="Montserrat">Montserrat</option></select><label>Выравнивание текста</label><select id="text-align" onchange="updatePreview()">
     <option value="center">По центру</option>
     <option value="left">Слева</option>
-    <option value="right">Справа</option></select><label>Размер шрифта (%)</label><input type="range" id="fontSize" min="2" max="10" step="0.1" value="4" oninput="updatePreview()"></div><div style="padding: 20px; border-top: 1px solid var(--border);"><button class="btn btn-main" onclick="updatePreview()">ОБНОВИТЬ ПРЕВЬЮ</button><button class="btn btn-code" onclick="getGeniallyCode()">ПОЛУЧИТЬ КОД</button></div></div><div class="preview"><div id="device-wrapper"><iframe id="ifr"></iframe></div></div><div id="code-modal"><textarea id="result-code" readonly></textarea><button class="btn" onclick="document.getElementById('code-modal').style.display='none'" style="width: 200px; background:#fff; margin-top: 20px;">ЗАКРЫТЬ</button></div><script>
+    <option value="right">Справа</option></select><label>Размер шрифта (%)</label><input type="range" id="fontSize" min="2" max="10" step="0.1" value="4" oninput="updatePreview()">
+<label>Звук кнопки (URL)</label>
+<input type="text" id="sound-url" value="https://www.soundjay.com/buttons/sounds/button-37.mp3">
+</div><div style="padding: 20px; border-top: 1px solid var(--border);"><button class="btn btn-main" onclick="updatePreview()">ОБНОВИТЬ ПРЕВЬЮ</button><button class="btn btn-code" onclick="getGeniallyCode()">ПОЛУЧИТЬ КОД</button></div></div><div class="preview"><div id="device-wrapper"><iframe id="ifr"></iframe></div></div><div id="code-modal"><textarea id="result-code" readonly></textarea><button class="btn" onclick="document.getElementById('code-modal').style.display='none'" style="width: 200px; background:#fff; margin-top: 20px;">ЗАКРЫТЬ</button></div><script>
 function makeBlank() {
 const selection = window.getSelection();
 if (!selection.rangeCount || selection.toString().trim() === "") return;
@@ -29,6 +32,7 @@ const font = document.getElementById('font-family').value;
 const bg = document.getElementById('bg-url').value;
 const fz = document.getElementById('fontSize').value; 
 const align = document.getElementById('text-align').value;
+const sound = document.getElementById('sound-url').value;
 
 const tempDiv = document.createElement('div');
 tempDiv.innerHTML = editor.innerHTML;
@@ -74,8 +78,11 @@ return `<!DOCTYPE html><html><head><style>
         <div id="content">${tempDiv.innerHTML}</div>
         <button class="btn-check" onclick="check()">PRÜFEN</button>
     </div>
+    <audio id="click-sound" src="${sound}"></audio>
     <script>
         function check() {
+            const s = document.getElementById('click-sound');
+            if(s) { s.currentTime = 0; s.play(); }
             document.querySelectorAll('.game-input').forEach(i => {
                 if(i.value.trim().toLowerCase() === i.dataset.correct.toLowerCase()) i.classList.add('correct');
                 else { i.classList.remove('correct'); i.style.borderBottomColor = '#f44336'; }
