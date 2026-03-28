@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
+<!DOCTYPE html><html lang="ru"><head>
     <meta charset="UTF-8">
     <title>Fill in the Blanks - Pro Editor</title>
     <style>
         :root { 
-            /* Цвета в стиле вашего документа [cite: 2] */
             --accent: #00d4ff; 
             --bg: #1e1e24; 
             --panel: #2a2a32; 
@@ -13,46 +10,27 @@
             --neon: #ff00ff;
         }
         body { font-family: 'Segoe UI', sans-serif; background: #000; color: #fff; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        
-        /* Боковая панель [cite: 5, 6] */
-        .sidebar { width: 400px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; }
-        .sidebar-content { flex: 1; overflow-y: auto; padding: 20px; }
-        
-        h2 { color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin: 20px 0 10px; border-left: 3px solid var(--accent); padding-left: 10px; }
-        .card { background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 12px; border-radius: 15px; margin-bottom: 20px; }
-        
-        label { display: block; font-size: 10px; color: #aaa; text-transform: uppercase; margin-top: 8px; }
+        .sidebar { width: 400px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; [cite: 4, 5]}
+        .sidebar-content { flex: 1; overflow-y: auto; padding: 20px; [cite: 6]}
+        h2 { color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; margin: 20px 0 10px; border-left: 3px solid var(--accent); padding-left: 10px; [cite: 7, 8]}
+        .card { background: rgba(0,0,0,0.2); border: 1px solid var(--border); padding: 12px; border-radius: 15px; margin-bottom: 20px; [cite: 10]}
+        label { display: block; font-size: 10px; color: #aaa; text-transform: uppercase; margin-top: 8px; [cite: 11]}
         input, select, textarea { 
             width: 100%; background: #111; border: 1px solid #444; color: #fff; padding: 8px; 
-            border-radius: 8px; margin-top: 4px; box-sizing: border-box; outline: none; font-size: 13px; 
+            border-radius: 8px; margin-top: 4px; box-sizing: border-box; outline: none; font-size: 13px; [cite: 13]
         }
-
-        /* Кнопки как в примере [cite: 15, 16] */
-        .btn { border: none; padding: 14px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; }
-        .btn-main { background: var(--accent); color: #000; }
-        .btn-code { background: #77dd77; color: #000; }
+        .btn { border: none; padding: 14px; width: 100%; border-radius: 12px; cursor: pointer; font-weight: bold; margin-top: 10px; transition: 0.3s; [cite: 14]}
+        .btn-main { background: var(--accent); color: #000; [cite: 15]}
+        .btn-code { background: #77dd77; color: #000; [cite: 16]}
         .btn-blank { background: var(--neon); color: #fff; font-size: 11px; padding: 8px; }
-
-        /* Область превью [cite: 18, 19] */
-        .preview { flex: 1; background: #0c0c0e; display: flex; align-items: center; justify-content: center; padding: 40px; }
-        #device-wrapper { position: relative; background: transparent; border-radius: 30px; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
-        iframe { width: 100%; height: 100%; border: none; border-radius: 30px; background: transparent; }
-
-        /* Модальное окно с кодом [cite: 22, 23] */
-        #code-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 100; flex-direction: column; }
-        #result-code { width: 80%; height: 50%; background: #111; color: var(--accent); padding: 20px; border: 1px solid var(--accent); border-radius: 20px; }
-        
-        /* Стили для редактора текста */
-        #text-editor { 
-            background: #111; border: 1px solid var(--accent); min-height: 100px; padding: 10px; 
-            border-radius: 10px; line-height: 1.6; outline: none; margin-bottom: 10px;
-        }
+        .preview { flex: 1; background: #0c0c0e; display: flex; align-items: center; justify-content: center; padding: 40px; [cite: 17]}
+        #device-wrapper { position: relative; background: transparent; border-radius: 30px; box-shadow: 0 0 30px rgba(0,0,0,0.5); [cite: 18]}
+        iframe { width: 100%; height: 100%; border: none; border-radius: 30px; background: transparent; [cite: 19]}
+        #code-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; z-index: 100; flex-direction: column; [cite: 21]}
+        #result-code { width: 80%; height: 50%; background: #111; color: var(--accent); padding: 20px; border: 1px solid var(--accent); border-radius: 20px; [cite: 22, 23]}
+        #text-editor { background: #111; border: 1px solid var(--accent); min-height: 100px; padding: 10px; border-radius: 10px; line-height: 1.6; outline: none; margin-bottom: 10px; }
         .mark { background: rgba(255, 0, 255, 0.3); border-bottom: 2px solid var(--neon); padding: 0 2px; border-radius: 3px; }
-    </style>
-</head>
-<body>
-
-<div class="sidebar">
+    </style></head><body><div class="sidebar">
     <div class="sidebar-content">
         <h2>1. Настройки Экрана [cite: 25]</h2>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
@@ -79,27 +57,20 @@
             <option value="Indie Flower">Indie Flower</option>
             <option value="Montserrat">Montserrat</option>
         </select>
+        
+        <label>Размер шрифта (%)</label>
+        <input type="range" id="fontSize" min="2" max="10" step="0.1" value="4" oninput="updatePreview()">
     </div>
 
     <div style="padding: 20px; border-top: 1px solid var(--border);">
         <button class="btn btn-main" onclick="updatePreview()">ОБНОВИТЬ ПРЕВЬЮ [cite: 31]</button>
         <button class="btn btn-code" onclick="getGeniallyCode()">ПОЛУЧИТЬ КОД [cite: 31]</button>
-    </div>
-</div>
-
-<div class="preview">
+    </div></div><div class="preview">
     <div id="device-wrapper">
         <iframe id="ifr"></iframe>
-    </div>
-</div>
-
-<div id="code-modal">
+    </div></div><div id="code-modal">
     <textarea id="result-code" readonly></textarea>
-    <button class="btn" onclick="document.getElementById('code-modal').style.display='none'" style="width: 200px; background:#fff; margin-top: 20px;">ЗАКРЫТЬ</button>
-</div>
-
-<script>
-// Логика превращения выделенного текста в пропуск
+    <button class="btn" onclick="document.getElementById('code-modal').style.display='none'" style="width: 200px; background:#fff; margin-top: 20px;">ЗАКРЫТЬ</button></div><script>
 function makeBlank() {
     const selection = window.getSelection();
     if (!selection.rangeCount || selection.toString().trim() === "") return;
@@ -112,15 +83,14 @@ function makeBlank() {
     range.insertNode(span);
 }
 
-// Сборка финального кода игры для iframe [cite: 43]
 function buildInnerGame() {
     const editor = document.getElementById('text-editor');
     const neon = document.getElementById('neon-color').value;
     const textColor = document.getElementById('text-color').value;
     const font = document.getElementById('font-family').value;
     const bg = document.getElementById('bg-url').value;
+    const fz = document.getElementById('fontSize').value; // 
 
-    // Подготовка текста с инпутами
     const tempDiv = document.createElement('div');
     tempDiv.innerHTML = editor.innerHTML;
     tempDiv.querySelectorAll('.mark').forEach(span => {
@@ -129,25 +99,25 @@ function buildInnerGame() {
         input.className = 'game-input';
         input.placeholder = '...';
         input.dataset.correct = span.dataset.answer;
-        input.style.width = (span.dataset.answer.length * 15 + 20) + 'px';
+        // Динамическая ширина инпута относительно размера шрифта
+        input.style.width = (span.dataset.answer.length * 0.6) + 'em';
         span.parentNode.replaceChild(input, span);
     });
 
-    return `<!DOCTYPE html><html><head>
-    <style>
+    return `<!DOCTYPE html><html><head><style>
         body { 
             margin:0; height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;
             font-family:'${font}',sans-serif; color:${textColor}; 
             background: url(${bg}) center/cover, #000;
             border: 6px solid ${neon}; box-shadow: inset 0 0 20px ${neon}; border-radius: 30px; box-sizing: border-box;
         }
-        #content { font-size: 24px; line-height: 2; text-align: center; padding: 20px; }
+        #content { font-size: ${fz}vmin; line-height: 1.8; text-align: center; padding: 20px; }
         .game-input {
             background: rgba(255,255,255,0.1); border: none; border-bottom: 2px solid ${neon};
-            color: #fff; text-align: center; font-size: 22px; outline: none; margin: 0 5px;
+            color: #fff; text-align: center; font-size: inherit; outline: none; margin: 0 5px; [cite: 56]
         }
         .correct { border-bottom: 2px solid #77dd77 !important; color: #77dd77; }
-        .btn-check { margin-top: 30px; padding: 10px 30px; border-radius: 20px; border: none; background: ${neon}; color: white; cursor: pointer; font-weight: bold; }
+        .btn-check { margin-top: 30px; padding: 1.5vmin 4vmin; border-radius: 20px; border: none; background: ${neon}; color: white; cursor: pointer; font-weight: bold; font-size: 2.5vmin; [cite: 57]}
     </style></head><body>
         <div id="content">${tempDiv.innerHTML}</div>
         <button class="btn-check" onclick="check()">ПРОВЕРИТЬ</button>
@@ -155,6 +125,7 @@ function buildInnerGame() {
             function check() {
                 document.querySelectorAll('.game-input').forEach(i => {
                     if(i.value.trim().toLowerCase() === i.dataset.correct.toLowerCase()) i.classList.add('correct');
+                    else { i.classList.remove('correct'); i.style.borderBottomColor = '#f44336'; }
                 });
             }
         <\/script>
@@ -167,24 +138,17 @@ function updatePreview() {
     const wrapper = document.getElementById('device-wrapper');
     wrapper.style.width = w + 'px';
     wrapper.style.height = h + 'px';
-    
-    // Масштабирование превью под экран [cite: 88]
     const scale = Math.min((window.innerWidth - 450) / w, (window.innerHeight - 100) / h);
-    wrapper.style.transform = `scale(${scale})`;
-    
+    wrapper.style.transform = `scale(${scale})`; [cite: 88]
     document.getElementById('ifr').srcdoc = buildInnerGame();
 }
 
 function getGeniallyCode() {
     const html = buildInnerGame();
-    const escaped = html.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
+    const escaped = html.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&apos;'); [cite: 89]
     const w = document.getElementById('width').value;
     const h = document.getElementById('height').value;
     document.getElementById('result-code').value = `<iframe width="${w}" height="${h}" srcdoc="${escaped}" frameborder="0" scrolling="no" style="border-radius:30px;" allowtransparency="true"></iframe>`;
     document.getElementById('code-modal').style.display = 'flex';
 }
-
-window.onload = updatePreview;
-</script>
-</body>
-</html>
+window.onload = updatePreview;</script></body></html>
