@@ -1,65 +1,107 @@
-<div id="exercise-container" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 15px; border: 2px solid #FFD700;">
-    <p id="text-passage" style="line-height: 2; font-size: 18px; color: #333;">
-        Ich <input type="text" data-answer="bin" class="blank"> ein Lehrer. 
-        Das <input type="text" data-answer="ist" class="blank"> mein Buch. 
-        Wir <input type="text" data-answer="lernen" class="blank"> Deutsch.
-    </p>
+<div id="editor-container" style="font-family: 'Segoe UI', sans-serif; background: #1a1a1a; color: white; padding: 20px; border-radius: 15px; border: 2px solid #00d4ff; box-shadow: 0 0 15px rgba(0,212,255,0.5);">
     
-    <button onclick="checkAnswers()" style="margin-top: 20px; padding: 10px 20px; background: #00d4ff; border: none; border-radius: 25px; color: white; cursor: pointer; font-weight: bold; box-shadow: 0 4px 15px rgba(0,212,255,0.4);">
-        Проверить
-    </button>
-    
-    <p id="result-msg" style="margin-top: 15px; font-weight: bold;"></p>
+    <div id="creator-view">
+        <h3 style="color: #00d4ff; margin-top: 0;">🛠 Конструктор упражнения</h3>
+        <p style="font-size: 14px; opacity: 0.8;">Напишите текст, выделите слово мышкой и нажмите кнопку:</p>
+        
+        <div id="editable-text" contenteditable="true" style="background: #2a2a2a; padding: 15px; border-radius: 10px; min-height: 80px; border: 1px solid #444; line-height: 1.6; margin-bottom: 15px;">
+            Er lernt Deutsch in Berlin. Das macht Spaß!
+        </div>
+        
+        <button onclick="makeBlank()" style="background: #ff00ff; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold; margin-right: 10px;">
+            ✨ Сделать пропуском
+        </button>
+        
+        <button onclick="saveAndPlay()" style="background: #00d4ff; color: #1a1a1a; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">
+            🚀 Запустить игру
+        </button>
+    </div>
+
+    <div id="game-view" style="display: none;">
+        <div id="game-content" style="line-height: 2.2; font-size: 18px;"></div>
+        <button onclick="checkAnswers()" style="margin-top: 20px; padding: 10px 25px; background: linear-gradient(45deg, #00d4ff, #ff00ff); border: none; border-radius: 20px; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);">
+            Проверить ответы
+        </button>
+        <p id="feedback" style="margin-top: 15px; font-weight: bold; min-height: 24px;"></p>
+        <button onclick="backToEditor()" style="background: transparent; border: 1px solid #666; color: #aaa; font-size: 12px; cursor: pointer; margin-top: 10px;">Редактировать</button>
+    </div>
 </div>
 
 <style>
-    .blank {
+    .blank-input {
         border: none;
-        border-bottom: 2px dashed #666;
-        background: transparent;
+        border-bottom: 2px solid #ff00ff;
+        background: rgba(255, 255, 255, 0.1);
+        color: #00d4ff;
         width: 100px;
         text-align: center;
-        font-size: 18px;
         outline: none;
-        color: #555;
+        border-radius: 4px 4px 0 0;
     }
-    .correct {
-        border-bottom: 2px solid #28a745 !important;
-        color: #28a745 !important;
-        font-weight: bold;
-    }
-    .incorrect {
-        border-bottom: 2px solid #dc3545 !important;
-        color: #dc3545 !important;
-    }
+    .correct { border-bottom: 2px solid #28a745 !important; color: #28a745 !important; }
+    .incorrect { border-bottom: 2px solid #dc3545 !important; color: #dc3545 !important; }
+    .mark { background: rgba(255, 0, 255, 0.2); border-bottom: 1px dashed #ff00ff; }
 </style>
 
 <script>
-function checkAnswers() {
-    const inputs = document.querySelectorAll('.blank');
-    let correctCount = 0;
+function makeBlank() {
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+    const range = selection.getRangeAt(0);
+    const selectedText = range.toString().trim();
     
-    inputs.forEach(input => {
-        const userAnswer = input.value.trim().toLowerCase();
-        const correctAnswer = input.getAttribute('data-answer').toLowerCase();
-        
-        if (userAnswer === correctAnswer) {
-            input.classList.remove('incorrect');
-            input.classList.add('correct');
-            correctCount++;
-        } else {
-            input.classList.remove('correct');
-            input.classList.add('incorrect');
-        }
+    if (selectedText.length > 0) {
+        const span = document.createElement('span');
+        span.className = 'mark';
+        span.dataset.answer = selectedText;
+        span.textContent = selectedText;
+        range.deleteContents();
+        range.insertNode(span);
+    }
+}
+
+function saveAndPlay() {
+    const editor = document.getElementById('editable-text');
+    const gameContent = document.getElementById('game-content');
+    
+    // Клонируем содержимое и заменяем помеченные слова на инпуты
+    let html = editor.innerHTML;
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    
+    tempDiv.querySelectorAll('.mark').forEach(span => {
+        const answer = span.dataset.answer;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'blank-input';
+        input.dataset.correct = answer;
+        span.parentNode.replaceChild(input, span);
     });
     
-    const result = document.getElementById('result-msg');
-    if (correctCount === inputs.length) {
-        result.innerHTML = "🎉 Великолепно! Все правильно.";
-        result.style.color = "#28a745";
-    } else {
-        result.innerHTML = "Попробуйте еще раз. Правильно: " + correctCount + " из " + inputs.length;
-        result.style.color = "#dc3545";
-    }
+    gameContent.innerHTML = tempDiv.innerHTML;
+    document.getElementById('creator-view').style.display = 'none';
+    document.getElementById('game-view').style.display = 'block';
+}
+
+function checkAnswers() {
+    const inputs = document.querySelectorAll('.blank-input');
+    let score = 0;
+    inputs.forEach(input => {
+        if (input.value.trim().toLowerCase() === input.dataset.correct.toLowerCase()) {
+            input.classList.add('correct');
+            input.classList.remove('incorrect');
+            score++;
+        } else {
+            input.classList.add('incorrect');
+            input.classList.remove('correct');
+        }
+    });
+    document.getElementById('feedback').textContent = `Результат: ${score} из ${inputs.length}`;
+}
+
+function backToEditor() {
+    document.getElementById('creator-view').style.display = 'block';
+    document.getElementById('game-view').style.display = 'none';
+    document.getElementById('feedback').textContent = '';
 }
 </script>
